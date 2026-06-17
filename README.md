@@ -171,7 +171,7 @@ Si usas MongoDB del stack Docker desde el host, usa puerto **27020**: `mongodb:/
 ### Instalacion
 
 ```bash
-git clone https://github.com/6toInformatica/server-admin.git
+git clone https://github.com/<ORG>/server-admin.git
 cd server-admin
 pnpm install
 cp .env.example .env
@@ -202,7 +202,7 @@ Los hooks de Husky ejecutan lint-staged en cada commit.
 
 ## Docker
 
-Stack completo desde [kinalsports-stack](https://github.com/6toInformatica/kinalsports-stack). En contenedor escucha en puerto **3009**; variables Cloudinary y JWT se inyectan via `.env.docker` del stack.
+Stack completo desde el repositorio [kinalsports-stack](https://github.com/<ORG>/kinalsports-stack) de tu organización. En contenedor escucha en puerto **3009**; variables Cloudinary y JWT se inyectan via `.env.docker` del stack.
 
 ## Health Check
 
