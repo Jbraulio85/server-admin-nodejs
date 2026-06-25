@@ -23,10 +23,28 @@ const middlewares = (app) => {
   app.use(cors(corsOptions));
   app.use(helmet(helmetConfiguration));
   app.use(requestLimit);
-  app.use(morgan('dev'));
+  app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
 };
 
 const routes = (app) => {
+  app.get('/', (req, res) => {
+    res.status(200).json({
+      success: true,
+      service: 'KinalSports Admin API',
+      version: '1.0.0',
+      status: 'online',
+      message: 'API en línea. Usa los endpoints documentados abajo.',
+      endpoints: {
+        health: `${BASE_PATH}/health`,
+        fields: `${BASE_PATH}/fields`,
+        reservations: `${BASE_PATH}/reservations`,
+        teams: `${BASE_PATH}/teams`,
+        tournaments: `${BASE_PATH}/tournaments`,
+      },
+      timestamp: new Date().toISOString(),
+    });
+  });
+
   app.use(`${BASE_PATH}/fields`, fieldRoutes);
   app.use(`${BASE_PATH}/reservations`, reservationRoutes);
   app.use(`${BASE_PATH}/teams`, teamRoutes);
@@ -40,7 +58,6 @@ const routes = (app) => {
     });
   });
 
-  // 404 handler
   app.use((req, res) => {
     res.status(404).json({
       success: false,
@@ -49,17 +66,23 @@ const routes = (app) => {
   });
 };
 
-export const initServer = async () => {
+export const createApp = async () => {
   const app = express();
-  const PORT = process.env.PORT;
   app.set('trust proxy', 1);
 
-  try {
-    await dbConnection();
-    middlewares(app);
-    routes(app);
+  await dbConnection();
+  middlewares(app);
+  routes(app);
+  app.use(errorHandler);
 
-    app.use(errorHandler);
+  return app;
+};
+
+export const initServer = async () => {
+  const PORT = process.env.PORT || 3009;
+
+  try {
+    const app = await createApp();
 
     app.listen(PORT, () => {
       console.log(`KinalSports Admin Server running on port ${PORT}`);
