@@ -33,6 +33,14 @@ const routes = (app) => {
       service: 'KinalSports Admin API',
       version: '1.0.0',
       status: 'online',
+      message: 'API en línea. Usa los endpoints documentados abajo.',
+      endpoints: {
+        health: `${BASE_PATH}/health`,
+        fields: `${BASE_PATH}/fields`,
+        reservations: `${BASE_PATH}/reservations`,
+        teams: `${BASE_PATH}/teams`,
+        tournaments: `${BASE_PATH}/tournaments`,
+      },
       timestamp: new Date().toISOString(),
     });
   });
